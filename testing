@@ -1,0 +1,399 @@
+# DevOps — Complete Guide
+
+---
+
+## 1. What is DevOps?
+
+**DevOps** = **Dev**elopment + **Op**erations
+
+It's a **culture, set of practices, and tools** that brings together software development (Dev) and IT operations (Ops) to deliver software **faster, more reliably, and continuously**.
+
+> **Before DevOps:** Developers wrote code → threw it "over the wall" to operations → operations deployed it → things broke → blame game.
+
+> **With DevOps:** Dev and Ops work **together** throughout the entire software lifecycle.
+
+---
+
+## 2. Why DevOps Exists (The Problem It Solves)
+
+| **Without DevOps** | **With DevOps** |
+|---|---|
+| Slow releases (months/years) | Fast releases (daily/hourly) |
+| Manual deployments | Automated deployments |
+| "Works on my machine" issues | Consistent environments |
+| Blame between teams | Shared responsibility |
+| Bugs found late (in production) | Bugs caught early (in pipeline) |
+| Long recovery from failures | Quick recovery (minutes) |
+
+---
+
+## 3. DevOps Lifecycle (The Infinity Loop ♾️)
+
+DevOps is a **continuous loop** with 8 phases:
+
+```
+    Plan → Code → Build → Test
+     ↑                        ↓
+  Monitor ← Deploy ← Release ← Test
+```
+
+### Detailed Breakdown:
+
+| Phase | What Happens | Tools |
+|---|---|---|
+| **1. Plan** | Define features, user stories, tasks | Jira, Trello, GitLab Issues, GitHub Projects |
+| **2. Code** | Write and review code | VS Code, Zed, Git, GitHub, GitLab |
+| **3. Build** | Compile code, create artifacts | Maven, Gradle, npm, Docker |
+| **4. Test** | Run automated tests | Jest, Selenium, JUnit, Cypress |
+| **5. Release** | Prepare for deployment | GitLab CI/CD, GitHub Actions, Jenkins |
+| **6. Deploy** | Push to production servers | Kubernetes, Docker, Ansible, Terraform |
+| **7. Operate** | Manage infrastructure & uptime | AWS, Azure, GCP, Kubernetes |
+| **8. Monitor** | Track performance, errors, logs | Prometheus, Grafana, Datadog, ELK Stack |
+
+---
+
+## 4. Core DevOps Practices
+
+### 4.1 **CI — Continuous Integration**
+Developers merge code into a shared repository **multiple times a day**. Each merge triggers **automated builds and tests**.
+
+```
+Developer pushes code
+        ↓
+Automated build runs
+        ↓
+Automated tests run
+        ↓
+✅ Pass → Code is merged
+❌ Fail → Developer is notified immediately
+```
+
+**Tools:** Jenkins, GitHub Actions, GitLab CI/CD, CircleCI, Travis CI
+
+---
+
+### 4.2 **CD — Continuous Delivery**
+Code is **always in a deployable state**. After passing CI, it's ready to be released to production at any time (with manual approval).
+
+---
+
+### 4.3 **CD — Continuous Deployment**
+Takes it further — code is **automatically deployed to production** after passing all tests. No human intervention needed.
+
+```
+CI → Continuous Integration (build + test)
+CD → Continuous Delivery (ready to deploy)
+CD → Continuous Deployment (auto-deployed)
+```
+
+---
+
+### 4.4 **Infrastructure as Code (IaC)**
+Instead of manually configuring servers, you **write code to define your infrastructure**.
+
+```hcl
+# Terraform example — create an AWS server
+resource "aws_instance" "web" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+  
+  tags = {
+    Name = "my-web-server"
+  }
+}
+```
+
+**Tools:** Terraform, Ansible, Pulumi, CloudFormation
+
+**Benefits:**
+- Version-controlled infrastructure
+- Reproducible environments
+- No "snowflake servers"
+
+---
+
+### 4.5 **Configuration Management**
+Automate the setup and maintenance of servers.
+
+**Tools:** Ansible, Chef, Puppet, SaltStack
+
+```yaml
+# Ansible example — install Nginx on all servers
+- hosts: webservers
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+```
+
+---
+
+### 4.6 **Containerization**
+Package your application with **all its dependencies** into a container so it runs the same everywhere.
+
+```dockerfile
+# Dockerfile example
+FROM node:18
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+**Tools:** Docker, Podman
+
+---
+
+### 4.7 **Container Orchestration**
+Manage **hundreds or thousands of containers** across multiple servers.
+
+**Tools:** Kubernetes (K8s), Docker Swarm, Amazon ECS
+
+```yaml
+# Kubernetes deployment example
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: my-app:1.0
+        ports:
+        - containerPort: 3000
+```
+
+---
+
+### 4.8 **Monitoring & Logging**
+Track application health, performance, and errors in real time.
+
+| Type | Purpose | Tools |
+|---|---|---|
+| **Metrics** | CPU, memory, response times | Prometheus, Grafana, Datadog |
+| **Logs** | Application events and errors | ELK Stack (Elasticsearch, Logstash, Kibana), Loki |
+| **Tracing** | Track requests across services | Jaeger, Zipkin |
+| **Alerting** | Notify when things break | PagerDuty, OpsGenie, Slack alerts |
+
+---
+
+## 5. DevOps Tools Ecosystem (Complete Map)
+
+```
+┌──────────────────────────────────────────────────────┐
+│                    DevOps Tools Map                    │
+├──────────────┬───────────────────────────────────────┤
+│ Source Control│ Git, GitHub, GitLab, Bitbucket        │
+├──────────────┼───────────────────────────────────────┤
+│ CI/CD        │ Jenkins, GitHub Actions, GitLab CI,   │
+│              │ CircleCI, ArgoCD, Travis CI            │
+├──────────────┼───────────────────────────────────────┤
+│ Build        │ Maven, Gradle, npm, Make, Bazel       │
+├──────────────┼───────────────────────────────────────┤
+│ Testing      │ JUnit, Jest, Selenium, Cypress,       │
+│              │ SonarQube (code quality)               │
+├──────────────┼───────────────────────────────────────┤
+│ Artifacts    │ Docker Hub, JFrog Artifactory,        │
+│              │ Nexus, GitHub Packages                 │
+├──────────────┼───────────────────────────────────────┤
+│ Containers   │ Docker, Podman, containerd            │
+├──────────────┼───────────────────────────────────────┤
+│ Orchestration│ Kubernetes, Docker Swarm, Nomad       │
+├──────────────┼───────────────────────────────────────┤
+│ IaC          │ Terraform, Ansible, Pulumi,           │
+│              │ CloudFormation                         │
+├──────────────┼───────────────────────────────────────┤
+│ Cloud        │ AWS, Azure, GCP, DigitalOcean         │
+├──────────────┼───────────────────────────────────────┤
+│ Monitoring   │ Prometheus, Grafana, Datadog,         │
+│              │ New Relic, ELK Stack                   │
+├──────────────┼───────────────────────────────────────┤
+│ Security     │ Snyk, Trivy, Vault, SonarQube,        │
+│ (DevSecOps)  │ OWASP ZAP                             │
+└──────────────┴───────────────────────────────────────┘
+```
+
+---
+
+## 6. DevOps Culture & Principles
+
+DevOps is **not just tools** — it's a **mindset**:
+
+### The **CALMS** Framework:
+| Letter | Principle | Meaning |
+|---|---|---|
+| **C** | Culture | Break silos between Dev and Ops |
+| **A** | Automation | Automate everything possible |
+| **L** | Lean | Eliminate waste, work in small batches |
+| **M** | Measurement | Measure everything (metrics, KPIs) |
+| **S** | Sharing | Share knowledge, responsibility, and tools |
+
+### Key Metrics (DORA Metrics):
+| Metric | What It Measures | Elite Teams |
+|---|---|---|
+| **Deployment Frequency** | How often you deploy | Multiple times per day |
+| **Lead Time for Changes** | Code commit to production | Less than 1 hour |
+| **Change Failure Rate** | % of deploys causing failure | Less than 5% |
+| **Mean Time to Recovery (MTTR)** | Time to recover from failure | Less than 1 hour |
+
+---
+
+## 7. DevOps vs Related Concepts
+
+| Concept | Meaning |
+|---|---|
+| **DevOps** | Dev + Ops working together |
+| **DevSecOps** | DevOps + Security integrated into every phase |
+| **GitOps** | Using Git as the single source of truth for infrastructure |
+| **MLOps** | DevOps for Machine Learning models |
+| **SRE (Site Reliability Engineering)** | Google's approach to operations — treats ops as a software problem |
+| **Platform Engineering** | Building internal developer platforms to abstract DevOps complexity |
+
+---
+
+## 8. A Real-World DevOps Pipeline Example
+
+Here's what happens when a developer pushes code:
+
+```
+1. Developer pushes code to GitHub/GitLab
+            ↓
+2. CI pipeline triggers automatically
+            ↓
+3. Code is compiled/built (npm build, maven build)
+            ↓
+4. Unit tests run (Jest, JUnit)
+            ↓
+5. Code quality scan (SonarQube)
+            ↓
+6. Security scan (Snyk, Trivy)
+            ↓
+7. Docker image is built
+            ↓
+8. Image is pushed to container registry (Docker Hub)
+            ↓
+9. Deploy to staging environment (Kubernetes)
+            ↓
+10. Integration/E2E tests run (Cypress, Selenium)
+            ↓
+11. Manual approval (or auto-deploy)
+            ↓
+12. Deploy to production (Kubernetes)
+            ↓
+13. Monitoring kicks in (Prometheus, Grafana)
+            ↓
+14. Alerts if anything goes wrong (PagerDuty, Slack)
+```
+
+### GitLab CI/CD Example:
+```yaml
+# .gitlab-ci.yml
+stages:
+  - build
+  - test
+  - security
+  - deploy
+
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+
+test:
+  stage: test
+  script:
+    - npm run test
+
+security_scan:
+  stage: security
+  script:
+    - trivy image my-app:latest
+
+deploy_production:
+  stage: deploy
+  script:
+    - kubectl apply -f k8s/deployment.yml
+  only:
+    - main
+  when: manual
+```
+
+---
+
+## 9. DevOps Learning Roadmap
+
+### **Phase 1: Foundations** (1-2 months)
+- [ ] Linux basics (commands, file system, permissions)
+- [ ] Networking basics (DNS, HTTP, TCP/IP, SSH)
+- [ ] Git & version control
+- [ ] One programming/scripting language (Python or Bash)
+
+### **Phase 2: Core DevOps** (2-3 months)
+- [ ] Docker (containerization)
+- [ ] CI/CD (GitHub Actions or GitLab CI)
+- [ ] Cloud basics (AWS/Azure/GCP — start with one)
+- [ ] Basic monitoring (Prometheus + Grafana)
+
+### **Phase 3: Advanced** (3-4 months)
+- [ ] Kubernetes (container orchestration)
+- [ ] Terraform (Infrastructure as Code)
+- [ ] Ansible (configuration management)
+- [ ] Advanced networking & security
+
+### **Phase 4: Expert** (ongoing)
+- [ ] Service mesh (Istio, Linkerd)
+- [ ] GitOps (ArgoCD, Flux)
+- [ ] Platform Engineering
+- [ ] Chaos Engineering (Chaos Monkey)
+- [ ] DevSecOps practices
+
+---
+
+## 10. DevOps Career & Salary
+
+| Role | Average Salary (US) |
+|---|---|
+| Junior DevOps Engineer | $70,000 - $95,000 |
+| Mid-Level DevOps Engineer | $95,000 - $130,000 |
+| Senior DevOps Engineer | $130,000 - $175,000 |
+| DevOps Architect | $150,000 - $200,000+ |
+| SRE (Site Reliability Engineer) | $120,000 - $190,000 |
+
+### Popular Certifications:
+- **AWS:** Solutions Architect, DevOps Engineer
+- **Azure:** DevOps Engineer Expert (AZ-400)
+- **GCP:** Professional DevOps Engineer
+- **Kubernetes:** CKA, CKAD, CKS
+- **Terraform:** HashiCorp Terraform Associate
+- **Docker:** DCA (Docker Certified Associate)
+
+---
+
+## Summary
+
+> **DevOps is not a tool, a job title, or a team — it's a culture of collaboration, automation, and continuous improvement that makes software delivery faster, safer, and more reliable.**
+
+The key takeaways:
+1. **Automate everything** (builds, tests, deployments)
+2. **Use containers** (Docker + Kubernetes)
+3. **Infrastructure as Code** (Terraform, Ansible)
+4. **Monitor everything** (Prometheus, Grafana)
+5. **Fail fast, recover faster** (CI/CD + alerting)
+6. **Security is everyone's job** (DevSecOps)
